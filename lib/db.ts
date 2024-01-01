@@ -33,7 +33,11 @@ export const login = async (email: string, password: string) => {
   );
 
   console.log(user);
-  return user[0];
+  if (user.length > 0) {
+    return user[0];
+  } else {
+    return null;
+  }
 }
 
 export const insertUser = async (newUser: NewUser) => {
