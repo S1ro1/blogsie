@@ -1,4 +1,4 @@
-import {NewPost, insertPost } from "@/lib/db";
+import {NewPost, insertPost, NewUser, insertUser } from "@/lib/db";
 
 const featuredPosts: NewPost[] = [
   {
@@ -15,12 +15,25 @@ const featuredPosts: NewPost[] = [
   }
 ];
 
+const testUsers = [{
+  name: "John Smith",
+  email: "johnsmith@gmail.com",
+  password: "password",
+}]
+
 async function main() {
-  Promise.all(featuredPosts.map(insertPost)).then(() => {
+  await Promise.all(featuredPosts.map(insertPost)).then(() => {
     console.log("Successfully inserted featured posts.");
   }).catch((error) => {
     console.error("Error inserting featured posts:", error);
   });
+
+  await Promise.all(testUsers.map(insertUser)).then(() => {
+    console.log("Successfully inserted test users.");
+  }).catch((error) => {
+    console.error("Error inserting test users:", error);
+  });
+
   process.exit(0);
 }
 
