@@ -2,10 +2,11 @@ import "@/lib/config"
 import {drizzle} from "drizzle-orm/vercel-postgres";
 import {sql as psql} from "@vercel/postgres";
 
-import { eq, and, sql} from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import * as schema from "./schema"
 import {posts, users} from "./schema";
+import {compare} from "bcrypt";
 
 export const db = drizzle(psql, { schema});
 
@@ -26,14 +27,10 @@ export type NewUser = typeof users.$inferInsert;
 
 export const login = async (email: string, password: string) => {
   const user = await db.select().from(users).limit(1).where(
-    and(
       eq(users.email, email),
-      eq(users.password, password)
-    )
   );
 
-  console.log(user);
-  if (user.length > 0) {
+  if (user.length > 0 && await compare(password, user[0].password)) {
     return user[0];
   } else {
     return null;

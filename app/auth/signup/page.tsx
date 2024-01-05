@@ -3,13 +3,16 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { newUserSchema } from "@/lib/types";
-import {registerUserAction} from "@/lib/actions";
-import {showToast} from "@/lib/utils";
-import {Label} from "@/components/ui/label";
-import {LinkButton} from "@/components/link-button";
+import { registerUserAction } from "@/lib/actions";
+import { showToast } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { LinkButton } from "@/components/link-button";
+import { useRouter } from "next/navigation";
 
 
 export default function Page() {
+  const router = useRouter();
+
   const register = async (formData: FormData) => {
     const newUser = newUserSchema.safeParse({
       email: formData.get("email") as string,
@@ -27,6 +30,8 @@ export default function Page() {
     const response = await registerUserAction(newUser.data);
     if (response?.error) {
       showToast(response.error);
+    } else {
+      router.push("/auth/signin?success=true");
     }
   }
 

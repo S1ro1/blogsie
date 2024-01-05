@@ -29,7 +29,6 @@ export default function Page() {
     return () => {
       shownToast.current = false;
     }
-
   }, [showErrorToast, showSucessRegistrationToast])
 
   const login = (formData: FormData) => {

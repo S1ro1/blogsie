@@ -1,8 +1,9 @@
 "use server";
 
 import {newUserSchema} from "@/lib/types";
-import {insertUser, NewUser} from "@/lib/db";
+import {insertUser} from "@/lib/db";
 import {redirect} from "next/navigation";
+import {hash} from "bcrypt";
 
 export async function registerUserAction(newUser: unknown) {
   const validatedUser = newUserSchema.safeParse(newUser);
@@ -19,13 +20,16 @@ export async function registerUserAction(newUser: unknown) {
     }
   }
 
-  const user = await insertUser(validatedUser.data as NewUser);
+  const hashedPassword = await hash(validatedUser.data.password, 10);
+
+  const user = await insertUser({
+    email: validatedUser.data.email,
+    password: hashedPassword
+  });
 
   if (!user) {
     return {
       error: "Unable to register user",
     }
   }
-
-  redirect("/auth/signin?success=true");
 }
