@@ -6,6 +6,7 @@ export const { handlers, auth } = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
+      id: "credentials",
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         email: { label: "email", type: "text", placeholder: "jsmith@gmail.com" },
@@ -14,7 +15,6 @@ export const { handlers, auth } = NextAuth({
 
       async authorize(credentials, req) {
         const user = await login(credentials.email as string, credentials.password as string);
-
         if (user) {
           return {
             id: user.id.toString(),
@@ -26,5 +26,14 @@ export const { handlers, auth } = NextAuth({
         }
       }
     })
-  ]
+  ],
+  pages: {
+    "signIn": "/auth/signin",
+  },
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      return baseUrl
+    }
+  }
 })

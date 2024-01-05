@@ -1,5 +1,7 @@
-import {Landing} from "@/components/landing";
+import {NavBar} from "@/components/navbar";
 
-export default function Home() {
-  return <Landing />
+export default function App(){
+  return (
+    <NavBar/>
+  )
 }
