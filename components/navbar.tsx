@@ -1,5 +1,5 @@
-import {Blogsie} from "@/components/ui/blogsie";
-import {ThemeToggle} from "@/components/ui/theme-toggle";
+import {Blogsie} from "@/components/blogsie";
+import {ThemeToggle} from "@/components/theme-toggle";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {auth} from "@/auth";
@@ -19,7 +19,7 @@ export const NavBar = async () => {
         <Link href="/about">About</Link>
       </Button>
       <Button variant="ghost">
-        {session ? <Link href={"/api/auth/signout?callbackUrl=/"}>Sign Out</Link> : <Link href={"/auth/signin"}>Sign In</Link>}
+        {session ? <Link href={"/api/auth/signout?callbackUrl=/"}>Sign Out</Link> : <Link href={"/auth/signup"}>Sign Up</Link>}
       </Button>
       <ThemeToggle/>
     </div>

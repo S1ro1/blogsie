@@ -4,25 +4,33 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {signIn} from "next-auth/react";
 import {useSearchParams} from "next/navigation";
-import {useToast} from "@/components/ui/use-toast";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
+import {showToast} from "@/lib/utils";
 
 export default function Page() {
   const params = useSearchParams();
-  const showToast = params.get("error");
+  const showErrorToast = params.get("error");
+  const showSuccessLoginToast = params.get("success");
 
-  const { toast } = useToast()
+  const shownToast = useRef(false);
 
   useEffect(() => {
     setTimeout(() => {
-      if (showToast) {
-        toast({
-          variant: "destructive",
-          description: "Invalid email or password",
-        })
+      if (showErrorToast && !shownToast.current) {
+        showToast("Invalid credentials");
+        shownToast.current = true;
+      }
+
+      if (showSuccessLoginToast && !shownToast.current) {
+        showToast("Login successful");
+        shownToast.current = true;
       }
     }, 100)
-  }, [toast, showToast])
+    return () => {
+      shownToast.current = false;
+    }
+
+  }, [showErrorToast, showSuccessLoginToast])
 
   const login = (formData: FormData) => {
     signIn("credentials", {

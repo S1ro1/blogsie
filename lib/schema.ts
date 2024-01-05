@@ -7,10 +7,9 @@ export const posts = pgTable('posts', {
   likes: integer('likes').default(0),
 });
 
-
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name"),
   email: text("email").notNull(),
   password: text("password").notNull(),
   image: text("image"),
