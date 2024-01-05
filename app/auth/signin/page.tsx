@@ -22,7 +22,8 @@ export default function Page() {
         })
       }
     }, 100)
-  }, [toast])
+  }, [toast, showToast])
+
   const login = (formData: FormData) => {
     signIn("credentials", {
       email: formData.get("email") as string,
