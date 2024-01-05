@@ -10,7 +10,7 @@ import {showToast} from "@/lib/utils";
 export default function Page() {
   const params = useSearchParams();
   const showErrorToast = params.get("error");
-  const showSuccessLoginToast = params.get("success");
+  const showSucessRegistrationToast = params.get("success");
 
   const shownToast = useRef(false);
 
@@ -21,8 +21,8 @@ export default function Page() {
         shownToast.current = true;
       }
 
-      if (showSuccessLoginToast && !shownToast.current) {
-        showToast("Login successful");
+      if (showSucessRegistrationToast && !shownToast.current) {
+        showToast("Registration successful");
         shownToast.current = true;
       }
     }, 100)
@@ -30,7 +30,7 @@ export default function Page() {
       shownToast.current = false;
     }
 
-  }, [showErrorToast, showSuccessLoginToast])
+  }, [showErrorToast, showSucessRegistrationToast])
 
   const login = (formData: FormData) => {
     signIn("credentials", {
