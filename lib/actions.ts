@@ -1,9 +1,10 @@
 "use server";
 
 import {newUserSchema} from "@/lib/types";
-import {insertUser} from "@/lib/db";
-import {redirect} from "next/navigation";
-import {hash} from "bcrypt";
+import {db, insertUser} from "@/lib/db";
+import {compare, hash} from "bcrypt";
+import {users} from "@/lib/schema";
+import {eq} from "drizzle-orm";
 
 export async function registerUserAction(newUser: unknown) {
   const validatedUser = newUserSchema.safeParse(newUser);
@@ -31,5 +32,17 @@ export async function registerUserAction(newUser: unknown) {
     return {
       error: "Unable to register user",
     }
+  }
+}
+
+export const login = async (email: string, password: string) => {
+  const user = await db.select().from(users).limit(1).where(
+    eq(users.email, email),
+  );
+
+  if (user.length > 0 && await compare(password, user[0].password)) {
+    return user[0];
+  } else {
+    return null;
   }
 }

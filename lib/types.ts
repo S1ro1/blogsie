@@ -1,4 +1,5 @@
 import z from "zod";
+import {posts, users, usersToLikedPosts} from "@/lib/schema";
 
 export const newUserSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -11,3 +12,7 @@ export const newUserSchema = z.object({
     }
   }
 })
+
+export type NewPost = typeof posts.$inferInsert;
+export type NewUser = typeof users.$inferInsert;
+export type NewUserToLikedPost = typeof usersToLikedPosts.$inferInsert;

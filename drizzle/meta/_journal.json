@@ -22,6 +22,27 @@
       "when": 1704491682136,
       "tag": "0002_last_loki",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1704580881622,
+      "tag": "0003_motionless_valeria_richards",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1704582225524,
+      "tag": "0004_outstanding_scourge",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1704583368830,
+      "tag": "0005_glamorous_sway",
+      "breakpoints": true
     }
   ]
 }
