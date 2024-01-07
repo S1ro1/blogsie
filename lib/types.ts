@@ -4,7 +4,7 @@ import {posts, users, usersToLikedPosts} from "@/lib/schema";
 export const newUserSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
-  repeatPassword: z.string().min(8),
+  repeatPassword: z.string(),
 }).superRefine((data) => {
   if (data.password !== data.repeatPassword) {
     return {
