@@ -10,8 +10,10 @@ import {ScrollArea} from "@/components/ui/scroll-area";
 import {Button} from "@/components/ui/button";
 import {addBlogPostAction} from "@/lib/actions";
 import { newPostSchema } from "@/lib/types";
+
 import {useRouter} from "next/navigation";
 import {showToast} from "@/lib/utils";
+
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
@@ -19,6 +21,23 @@ export default function Page() {
   const [text, setText] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const router = useRouter();
+
+  const handleKeyDown = (e: any) => {
+    if (e.key == "Tab") {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      if (start === null || end === null) {
+        return;
+      }
+
+      textarea.value = textarea.value.substring(0, start) + "\t" + textarea.value.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + 1;
+    }
+  }
+
   const insertPost = async (formData: FormData) => {
     const newPost = newPostSchema.safeParse({
       title: formData.get("title") as string,
@@ -50,6 +69,7 @@ export default function Page() {
             type={"text"}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            onKeyDownCapture={handleKeyDown}
             placeholder={"Title..."}
             className={"w-1/2 text-2xl min-h-[52px]"}
             name={"title"}
@@ -61,6 +81,7 @@ export default function Page() {
             <Textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder={"Write your blog here..."}
               className={"h-full overflow-scroll p-5"}
               name={"content"}
