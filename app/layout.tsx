@@ -26,7 +26,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className={"mt-12"}>
+          <div className={"mt-16"}>
             {children}
           </div>
         </ThemeProvider>

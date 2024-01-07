@@ -21,6 +21,9 @@ export const NavBar = async () => {
       <Button variant="ghost">
         {session ? <Link href={"/api/auth/signout?callbackUrl=/"}>Sign Out</Link> : <Link href={"/auth/signup"}>Sign Up</Link>}
       </Button>
+      <Button variant="ghost">
+        {session &&  <Link href="/blog/new">New Post</Link>}
+      </Button>
       <ThemeToggle/>
     </div>
   </div>;
