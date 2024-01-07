@@ -34,6 +34,20 @@ export const { handlers, auth } = NextAuth({
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`
       return baseUrl
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+
+      return token;
+    },
+    async session({session, token }) {
+      if (token && session.user) {
+        session.user.id = token.id as string;
+      }
+
+      return session;
     }
   }
 })
