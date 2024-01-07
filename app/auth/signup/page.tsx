@@ -37,12 +37,14 @@ export default function Page() {
 
   return (
     <div className={"flex justify-center p-4"}>
-      <form className={"flex flex-col gap-y-5 lg:w-1/6 md:w-1/4 w-full"} action={register}>
+      <form className={"flex flex-col gap-y-5 lg:w-1/5 md:w-1/2 w-[80%]"} action={register}>
         <Input type={"email"} placeholder={"Email"} name={"email"}/>
         <Input type={"password"} placeholder={"Password"} name={"password"}/>
         <Input type={"password"} placeholder={"Repeat Password"} name={"repeatPassword"}/>
-        <Label>Already have an account? <LinkButton href={"/auth/signin"} text={"Login here!"}/></Label>
-        <Button type={"submit"} variant={"outline"}>Sign In</Button>
+        <div className={"w-full"}>
+          <Label className={"font-light text-xs"}>Already have an account? <LinkButton href={"/auth/signin"} text={"Login here!"} className={"font-medium text-xs"}/></Label>
+          <Button type={"submit"} variant={"outline"} className={"w-full"}>Sign Up</Button>
+        </div>
       </form>
     </div>
     )

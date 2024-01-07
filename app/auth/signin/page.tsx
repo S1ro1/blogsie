@@ -6,6 +6,8 @@ import {signIn} from "next-auth/react";
 import {useSearchParams} from "next/navigation";
 import {useEffect, useRef} from "react";
 import {showToast} from "@/lib/utils";
+import {Label} from "@/components/ui/label";
+import {LinkButton} from "@/components/link-button";
 
 export default function Page() {
   const params = useSearchParams();
@@ -41,10 +43,13 @@ export default function Page() {
 
   return (
     <div className={"flex justify-center p-4"}>
-      <form className={"flex flex-col gap-y-5 lg:w-1/6 md:w-1/4 w-full"} action={login}>
+      <form className={"flex flex-col gap-y-5 lg:w-1/5 md:w-1/2 w-[80%]"} action={login}>
         <Input type={"email"} placeholder={"Email"} name={"email"}/>
         <Input type={"password"} placeholder={"Password"} name={"password"}/>
-        <Button type={"submit"} variant={"outline"}>Sign In</Button>
+        <div className={"w-full"}>
+          <Label className={"font-light text-xs"}>{"Don't have an account yet? "}<LinkButton href={"/auth/signup"} text={"Register here!"} className={"font-medium text-xs"}/></Label>
+          <Button type={"submit"} variant={"outline"} className={"w-full"}>Sign In</Button>
+        </div>
       </form>
     </div>
   )
