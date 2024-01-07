@@ -53,36 +53,30 @@ export const addBlogPostAction = async(newBlogPost: unknown) => {
 
   if (!validatedBlogPost.success) {
     let error_message = "";
-
     validatedBlogPost.error.issues.forEach((issue) => {
       error_message += issue.message + ". ";
     })
-
     return {
       error: error_message,
     }
   }
 
   const session = await auth();
-
   if (!session) {
     return {
       error: "You must be logged in to add a blog post",
     }
   }
-
   if (!session.user) {
     return {
       error: "You must be logged in to add a blog post",
     }
   }
 
-  const user = session.user;
-
   let blogPost: NewPost;
   try {
     blogPost = {
-      authorId: parseInt(user.id),
+      authorId: parseInt(session.user.id),
       title: validatedBlogPost.data.title,
       description: validatedBlogPost.data.content,
     };
@@ -93,7 +87,6 @@ export const addBlogPostAction = async(newBlogPost: unknown) => {
   }
 
   const newPost = await insertPost(blogPost);
-
   if (!newPost) {
     return {
       error: "Unable to add blog post",

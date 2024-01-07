@@ -12,6 +12,8 @@ import {addBlogPostAction} from "@/lib/actions";
 import { newPostSchema } from "@/lib/types";
 import {useRouter} from "next/navigation";
 import {showToast} from "@/lib/utils";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dracula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 export default function Page() {
   const [text, setText] = useState<string>("");
@@ -67,7 +69,26 @@ export default function Page() {
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={50}>
             <ScrollArea className={"h-full border"}>
-              <Markdown remarkPlugins={[remarkGfm]} className={"markdown p-5 overflow-scroll"}>{text}</Markdown>
+              <Markdown
+                remarkPlugins={[remarkGfm]}
+                className={"markdown p-5"}
+                components={{
+                  code({ node, inline, className, children, ...props }: any) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    return !inline && match ? (
+                      <SyntaxHighlighter style={dracula} PreTag="div" language={match[1]} {...props}>
+                        {String(children).replace(/\n$/, '') ? children : <span>&nbsp;</span>}
+                      </SyntaxHighlighter>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
+              >
+                {text}
+              </Markdown>
             </ScrollArea>
           </ResizablePanel>
           <Button className={"absolute bottom-0 right-0 m-5"} type={"submit"}>Post</Button>
