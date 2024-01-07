@@ -6,9 +6,8 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import {useState} from "react";
 import {Textarea} from "@/components/ui/textarea";
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
-import {dark} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import {ScrollArea} from "@/components/ui/scroll-area";
+import {Button} from "@/components/ui/button";
 
 
 export default function Page() {
@@ -19,7 +18,7 @@ export default function Page() {
 
   return (
     <div className={"flex justify-center h-[90vh]"}>
-      <form className={"flex flex-col w-[80%] items-start h-full gap-y-4 min-h-full"}>
+      <form className={"flex flex-col w-[80%] items-start gap-y-4 h-full"}>
         <div className={"flex flex-row text-left w-full items-center"}>
           <Input
             type={"text"}
@@ -30,7 +29,7 @@ export default function Page() {
           />
           <h1 className={"text-4xl mx-5"}>{title}</h1>
         </div>
-        <ResizablePanelGroup direction="horizontal">
+        <ResizablePanelGroup direction="horizontal" className={"relative"}>
           <ResizablePanel defaultSize={50}>
             <Textarea
               value={text}
@@ -45,6 +44,7 @@ export default function Page() {
               <Markdown remarkPlugins={[remarkGfm]} className={"markdown p-5 overflow-scroll"}>{text}</Markdown>
             </ScrollArea>
           </ResizablePanel>
+          <Button className={"absolute bottom-0 right-0 m-5"} type={"submit"}>Post</Button>
         </ResizablePanelGroup>
       </form>
     </div>
