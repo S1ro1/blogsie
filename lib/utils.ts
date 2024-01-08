@@ -17,7 +17,7 @@ export function showToast(message: string) {
   });
 }
 
-export const handleKeyDown = (e: any) => {
+export const enableTab = (e: any) => {
   if (e.key == "Tab") {
     e.preventDefault();
     const textarea = e.currentTarget;

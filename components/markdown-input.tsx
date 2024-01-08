@@ -1,7 +1,7 @@
 import {ResizablePanel} from "@/components/ui/resizable";
 import {Textarea} from "@/components/ui/textarea";
 import React from "react";
-import {handleKeyDown} from "@/lib/utils";
+import {enableTab} from "@/lib/utils";
 
 interface MarkdownInputProps {
   text: string;
@@ -14,7 +14,7 @@ export const MarkdownInput = ({text, setText}: MarkdownInputProps) => {
       <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        onKeyDown={handleKeyDown}
+        onKeyDown={enableTab}
         placeholder={"Write your blog here..."}
         className={"h-full overflow-scroll p-5"}
         name={"content"}

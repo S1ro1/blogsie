@@ -5,19 +5,17 @@ import React, {useState} from "react";
 import {Button} from "@/components/ui/button";
 import {addBlogPostAction} from "@/lib/actions";
 import { newPostSchema } from "@/lib/types";
-
 import {useRouter} from "next/navigation";
 import {showToast} from "@/lib/utils";
-
 import {BlogTitle} from "@/components/blog-title";
 import {MarkdownInput} from "@/components/markdown-input";
 import {MarkdownPreview} from "@/components/markdown-preview";
 
 export default function Page() {
-  const [text, setText] = useState<string>("");
+  const [rawMarkdown, setRawMarkdown] = useState<string>("");
   const router = useRouter();
 
-  const insertPost = async (formData: FormData) => {
+  const createPost = async (formData: FormData) => {
     const newPost = newPostSchema.safeParse({
       title: formData.get("title") as string,
       content: formData.get("content") as string,
@@ -40,12 +38,12 @@ export default function Page() {
 
   return (
     <div className={"flex justify-center h-[90vh]"}>
-      <form className={"flex flex-col w-[80%] items-start gap-y-4 h-[90%]"} action={insertPost}>
+      <form className={"flex flex-col w-[80%] items-start gap-y-4 h-[90%]"} action={createPost}>
         <BlogTitle />
         <ResizablePanelGroup direction="horizontal" className={"relative"}>
-          <MarkdownInput text={text} setText={setText} />
+          <MarkdownInput text={rawMarkdown} setText={setRawMarkdown} />
           <ResizableHandle withHandle />
-          <MarkdownPreview text={text} />
+          <MarkdownPreview text={rawMarkdown} />
           <Button className={"absolute bottom-0 right-0 m-5"} type={"submit"}>Post</Button>
         </ResizablePanelGroup>
       </form>
