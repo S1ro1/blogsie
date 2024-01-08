@@ -16,3 +16,20 @@ export function showToast(message: string) {
     }
   });
 }
+
+export const handleKeyDown = (e: any) => {
+  if (e.key == "Tab") {
+    e.preventDefault();
+    const textarea = e.currentTarget;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    if (start === null || end === null) {
+      return;
+    }
+
+    textarea.value = textarea.value.substring(0, start) + "\t" + textarea.value.substring(end);
+    textarea.selectionStart = textarea.selectionEnd = start + 1;
+  }
+}
+

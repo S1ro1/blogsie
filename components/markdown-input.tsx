@@ -1,0 +1,24 @@
+import {ResizablePanel} from "@/components/ui/resizable";
+import {Textarea} from "@/components/ui/textarea";
+import React from "react";
+import {handleKeyDown} from "@/lib/utils";
+
+interface MarkdownInputProps {
+  text: string;
+  setText: (text: string) => void;
+}
+
+export const MarkdownInput = ({text, setText}: MarkdownInputProps) => {
+  return (
+    <ResizablePanel defaultSize={50}>
+      <Textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder={"Write your blog here..."}
+        className={"h-full overflow-scroll p-5"}
+        name={"content"}
+      />
+    </ResizablePanel>
+  )
+}
