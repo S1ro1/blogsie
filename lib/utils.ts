@@ -18,6 +18,8 @@ export function showToast(message: string) {
 }
 
 export const enableTab = (e: any) => {
+
+
   if (e.key == "Tab") {
     e.preventDefault();
     const textarea = e.currentTarget;
@@ -33,3 +35,21 @@ export const enableTab = (e: any) => {
   }
 }
 
+export class DefaultDict<T, Q> extends Map<T, Q> {
+  defaultFactory: () => Q
+
+  constructor(defaultFactory: () => Q) {
+    super()
+    this.defaultFactory = defaultFactory
+  }
+
+  get(name: T): Q {
+    if (this.has(name)) {
+      return super.get(name)!
+    } else {
+      const value = this.defaultFactory()
+      this.set(name, value)
+      return value
+    }
+  }
+}

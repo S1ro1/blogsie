@@ -1,5 +1,6 @@
 import z from "zod";
 import {posts, postsToTags, tags, users, usersToLikedPosts} from "@/lib/schema";
+import {fetchPosts} from "@/lib/db";
 
 export const newUserSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -25,3 +26,7 @@ export type NewTag = typeof tags.$inferInsert;
 // M:N
 export type NewUserToLikedPost = typeof usersToLikedPosts.$inferInsert;
 export type NewPostToTag = typeof postsToTags.$inferInsert;
+
+// Fetching data
+type ResolvedType<T> = T extends Promise<infer R> ? R : T;
+export type FetchPostsResultType = ResolvedType<ReturnType<typeof fetchPosts>>;

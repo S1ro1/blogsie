@@ -68,6 +68,10 @@ const postsToTags: NewPostToTag[] = [
     postId: 1,
     tagId: 3,
   },
+  {
+    postId: 2,
+    tagId: 2,
+  }
 ]
 
 async function main() {

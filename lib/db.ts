@@ -30,3 +30,20 @@ export const insertUserToLikedPost = async (newUserToLikedPost: NewUserToLikedPo
 export const insertPostToTag = async (newPostToTag: NewPostToTag) => {
   return db.insert(postsToTags).values(newPostToTag).returning();
 }
+
+// Fetching data
+// -------------------------------------------------
+
+export const fetchPosts = async () => {
+  return db.query.posts.findMany({
+    with: {
+      author: true,
+      userToLikedPosts: true,
+      postToTags: {
+        with: {
+          tag: true
+        }
+      }
+    }
+  })
+}
