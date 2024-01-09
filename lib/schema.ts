@@ -47,7 +47,8 @@ export const tagRelations = relations(tags, ({ many }) => ({
 export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
-  description: text("description").notNull(),
+  description: text("description"),
+  text: text("text").notNull(),
   authorId: integer("author_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

@@ -6,6 +6,7 @@ import { compare, hash } from "bcrypt";
 import { users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
+import { PutBlobResult } from "@vercel/blob";
 
 export const login = async (email: string, password: string) => {
   const user = await db
@@ -80,6 +81,7 @@ export const addBlogPostAction = async (newBlogPost: unknown) => {
     blogPost = {
       authorId: parseInt(session.user.id),
       title: validatedBlogPost.data.title,
+      text: validatedBlogPost.data.content, //TODO
       description: validatedBlogPost.data.content,
     };
   } catch (e) {
@@ -95,3 +97,18 @@ export const addBlogPostAction = async (newBlogPost: unknown) => {
     };
   }
 };
+
+export async function uploadFileAction(formData: FormData) {
+  const file = formData.get("picture") as File;
+
+  if (!file) {
+    return null;
+  }
+
+  const response = await fetch(`http://localhost:3000/api/image/upload?filename=${file.name}`, {
+    method: "POST",
+    body: file,
+  });
+
+  return (await response.json()) as PutBlobResult;
+}

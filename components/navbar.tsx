@@ -3,9 +3,13 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const NavBar = async () => {
   const session = await auth();
+
+  const imageLink = session?.user?.image || "";
+
 
   return (
     <div className="fixed top-0 left-0 w-full z-50 flex justify-between">
@@ -15,9 +19,6 @@ export const NavBar = async () => {
         </Link>
       </div>
       <div className="flex flex-row items-center gap-5 m-4">
-        <Button variant="ghost">
-          <Link href="/about">About</Link>
-        </Button>
         <Button variant="ghost">
           {session ? (
             <Link href={"/api/auth/signout?callbackUrl=/"}>Sign Out</Link>
@@ -29,6 +30,10 @@ export const NavBar = async () => {
           {session && <Link href="/blog/new">New Post</Link>}
         </Button>
         <ThemeToggle />
+        <Avatar>
+          <AvatarImage src={`/api/image/download?url=${imageLink}`} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
       </div>
     </div>
   );
