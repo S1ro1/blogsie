@@ -1,15 +1,18 @@
 "use client";
 
-import {ResizableHandle, ResizablePanelGroup} from "@/components/ui/resizable";
-import React, {useState} from "react";
-import {Button} from "@/components/ui/button";
-import {addBlogPostAction} from "@/lib/actions";
+import {
+  ResizableHandle,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { addBlogPostAction } from "@/lib/actions";
 import { newPostSchema } from "@/lib/types";
-import {useRouter} from "next/navigation";
-import {showToast} from "@/lib/utils";
-import {BlogTitle} from "@/components/blog-title";
-import {MarkdownInput} from "@/components/markdown-input";
-import {MarkdownPreview} from "@/components/markdown-preview";
+import { useRouter } from "next/navigation";
+import { showToast } from "@/lib/utils";
+import { BlogTitle } from "@/components/blog-title";
+import { MarkdownInput } from "@/components/markdown-input";
+import { MarkdownPreview } from "@/components/markdown-preview";
 
 export default function Page() {
   const [rawMarkdown, setRawMarkdown] = useState<string>("");
@@ -19,12 +22,12 @@ export default function Page() {
     const newPost = newPostSchema.safeParse({
       title: formData.get("title") as string,
       content: formData.get("content") as string,
-    })
+    });
 
     if (!newPost.success) {
       newPost.error.issues.forEach((issue) => {
         showToast(issue.message);
-      })
+      });
       return;
     }
     // TODO: Maybe do a server validation before returning and show all the errors
@@ -34,19 +37,24 @@ export default function Page() {
     } else {
       router.push("/");
     }
-  }
+  };
 
   return (
     <div className={"flex justify-center h-[90vh]"}>
-      <form className={"flex flex-col w-[80%] items-start gap-y-4 h-[90%]"} action={createPost}>
+      <form
+        className={"flex flex-col w-[80%] items-start gap-y-4 h-[90%]"}
+        action={createPost}
+      >
         <BlogTitle />
         <ResizablePanelGroup direction="horizontal" className={"relative"}>
           <MarkdownInput text={rawMarkdown} setText={setRawMarkdown} />
           <ResizableHandle withHandle />
           <MarkdownPreview text={rawMarkdown} />
-          <Button className={"absolute bottom-0 right-0 m-5"} type={"submit"}>Post</Button>
+          <Button className={"absolute bottom-0 right-0 m-5"} type={"submit"}>
+            Post
+          </Button>
         </ResizablePanelGroup>
       </form>
     </div>
-  )
+  );
 }

@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import {NavBar} from "@/components/navbar";
-import {SessionProvider} from "next-auth/react";
+import { NavBar } from "@/components/navbar";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,10 +26,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NavBar/>
-          <div className={"mt-16"}>
-            {children}
-          </div>
+          <NavBar />
+          <div className={"mt-16"}>{children}</div>
         </ThemeProvider>
         <Toaster />
       </body>

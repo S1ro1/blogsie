@@ -1,14 +1,14 @@
-import {ResizablePanel} from "@/components/ui/resizable";
-import {Textarea} from "@/components/ui/textarea";
+import { ResizablePanel } from "@/components/ui/resizable";
+import { Textarea } from "@/components/ui/textarea";
 import React from "react";
-import {enableTab} from "@/lib/utils";
+import { enableTab } from "@/lib/utils";
 
 interface MarkdownInputProps {
   text: string;
   setText: (text: string) => void;
 }
 
-export const MarkdownInput = ({text, setText}: MarkdownInputProps) => {
+export const MarkdownInput = ({ text, setText }: MarkdownInputProps) => {
   return (
     <ResizablePanel defaultSize={50}>
       <Textarea
@@ -20,5 +20,5 @@ export const MarkdownInput = ({text, setText}: MarkdownInputProps) => {
         name={"content"}
       />
     </ResizablePanel>
-  )
-}
+  );
+};
