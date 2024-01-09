@@ -14,6 +14,15 @@ export const userRelations = relations(users, ({many}) => ({
   userToLikedPosts: many(usersToLikedPosts)
 }))
 
+export const tags = pgTable('tags', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull().unique(),
+})
+
+export const tagRelations = relations(tags, ({many}) => ({
+  postToTags: many(postsToTags) // post M:N
+}))
+
 export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
   title: text('title').notNull(),
@@ -26,7 +35,9 @@ export const postRelations = relations(posts, ({one, many}) => ({
     fields: [posts.authorId],
     references: [users.id]
   }),
-  userToLikedPosts: many(usersToLikedPosts)
+  userToLikedPosts: many(usersToLikedPosts), // likes M:N
+
+  postToTags: many(postsToTags) // tags M:N
 }))
 
 export const usersToLikedPosts = pgTable('user_to_liked_posts', {
@@ -46,3 +57,37 @@ export const usersToLikedPostsRelations = relations(usersToLikedPosts, ({one}) =
     references: [users.id]
   })
 }))
+
+export const postsToTags = pgTable('post_to_tags', {
+  postId: integer('post_id').notNull().references(() => posts.id, {onDelete: 'cascade'}),
+  tagId: integer('tag_id').notNull().references(() => tags.id, {onDelete: 'cascade'}),
+}, (t) => ({
+  pk: primaryKey({columns: [t.postId, t.tagId]}),
+}))
+
+export const postsToTagsRelations = relations(postsToTags, ({one}) => ({
+  post: one(posts, {
+    fields: [postsToTags.postId],
+    references: [posts.id]
+  }),
+  tag: one(tags, {
+    fields: [postsToTags.tagId],
+    references: [tags.id]
+  })
+}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

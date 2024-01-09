@@ -1,5 +1,5 @@
 import z from "zod";
-import {posts, users, usersToLikedPosts} from "@/lib/schema";
+import {posts, postsToTags, tags, users, usersToLikedPosts} from "@/lib/schema";
 
 export const newUserSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -20,4 +20,8 @@ export const newPostSchema = z.object({
 
 export type NewPost = typeof posts.$inferInsert;
 export type NewUser = typeof users.$inferInsert;
+export type NewTag = typeof tags.$inferInsert;
+
+// M:N
 export type NewUserToLikedPost = typeof usersToLikedPosts.$inferInsert;
+export type NewPostToTag = typeof postsToTags.$inferInsert;

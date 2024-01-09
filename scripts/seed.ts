@@ -1,7 +1,5 @@
-import {db, insertPost, insertUser, insertUserToLikedPost,} from "@/lib/db";
-import {NewPost, NewUser, NewUserToLikedPost} from "@/lib/types";
-import {usersToLikedPosts} from "@/lib/schema";
-import {eq} from "drizzle-orm";
+import {insertPost, insertPostToTag, insertTag, insertUser, insertUserToLikedPost} from "@/lib/db";
+import {NewPost, NewPostToTag, NewTag, NewUser, NewUserToLikedPost} from "@/lib/types";
 
 const posts: NewPost[] = [
   {
@@ -20,7 +18,7 @@ const posts: NewPost[] = [
     id: 4,
     authorId: 1,
     title: "The Power of Visual Storytelling",
-    description: "Explore how visual elements can enhance storytelling and engage audiences in unique ways."
+    description: "Explore how visual elements can enhance storytelling and engage audiences in unique ways.",
   }
 ];
 
@@ -42,6 +40,36 @@ const likes: NewUserToLikedPost[] = [
   },
 ]
 
+const tags: NewTag[] = [
+  {
+    id: 1,
+    name: "Python",
+  },
+  {
+    id: 2,
+    name: "Java",
+  },
+  {
+    id: 3,
+    name: "Web Development",
+  },
+]
+
+const postsToTags: NewPostToTag[] = [
+  {
+    postId: 1,
+    tagId: 1,
+  },
+  {
+    postId: 1,
+    tagId: 2,
+  },
+  {
+    postId: 1,
+    tagId: 3,
+  },
+]
+
 async function main() {
   await Promise.all(users.map(insertUser)).then(() => {
     console.log("Successfully inserted test users.");
@@ -60,6 +88,18 @@ async function main() {
   }).catch((error) => {
     console.error("Error inserting test likes:", error);
   });
+
+  await Promise.all(tags.map(insertTag)).then(() => {
+    console.log("Successfully inserted test tags.");
+  }).catch((error) => {
+    console.error("Error inserting test tags:", error);
+  });
+
+  await Promise.all(postsToTags.map(insertPostToTag)).then(() => {
+    console.log("Successfully inserted test postsToTags.");
+  }).catch((error) => {
+    console.error("Error inserting test postsToTags:", error);
+  })
 
   process.exit(0);
 }

@@ -3,8 +3,8 @@ import {drizzle} from "drizzle-orm/vercel-postgres";
 import {sql as psql} from "@vercel/postgres";
 
 import * as schema from "./schema"
-import {posts, users, usersToLikedPosts} from "./schema"
-import {NewPost, NewUser, NewUserToLikedPost} from "@/lib/types";
+import {posts, postsToTags, tags, users, usersToLikedPosts} from "./schema"
+import {NewPost, NewPostToTag, NewTag, NewUser, NewUserToLikedPost} from "@/lib/types";
 
 export const db = drizzle(psql, { schema});
 
@@ -16,6 +16,17 @@ export const insertUser = async (newUser: NewUser) => {
   return db.insert(users).values(newUser).returning();
 }
 
+export const insertTag = async (newTag: NewTag) => {
+  return db.insert(tags).values(newTag).returning();
+}
+
+
+// M:N
+// -------------------------------------------------
 export const insertUserToLikedPost = async (newUserToLikedPost: NewUserToLikedPost) => {
   return db.insert(usersToLikedPosts).values(newUserToLikedPost).returning();
+}
+
+export const insertPostToTag = async (newPostToTag: NewPostToTag) => {
+  return db.insert(postsToTags).values(newPostToTag).returning();
 }
