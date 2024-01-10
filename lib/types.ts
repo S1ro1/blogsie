@@ -38,3 +38,5 @@ export type NewPostToTag = typeof postsToTags.$inferInsert;
 // Fetching data
 type ResolvedType<T> = T extends Promise<infer R> ? R : T;
 export type FetchPostsResultType = ResolvedType<ReturnType<typeof fetchPosts>>;
+
+export type UserType = Omit<typeof users.$inferSelect, 'password'>;

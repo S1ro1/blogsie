@@ -8,13 +8,11 @@ export const { handlers, auth } = NextAuth({
       name: "Credentials",
       id: "credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        email: {
-          label: "email",
-          type: "text",
-          placeholder: "jsmith@gmail.com",
-        },
+        email : { label: "Email", type: "email", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
+        firstName: { label: "First Name", type: "text" },
+        lastName: { label: "Last Name", type: "text" },
+        image: { label: "Image", type: "text" },
       },
 
       async authorize(credentials, req) {
@@ -25,9 +23,11 @@ export const { handlers, auth } = NextAuth({
         if (user) {
           return {
             id: user.id.toString(),
-            name: user.name,
             email: user.email,
-          };
+            firstName: user.firstName,
+            lastName: user.lastName,
+            image: user.image,
+          } as User;
         } else {
           return null;
         }
@@ -45,6 +45,9 @@ export const { handlers, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.image = user.image;
       }
 
       return token;
@@ -52,6 +55,9 @@ export const { handlers, auth } = NextAuth({
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string;
+        session.user.firstName = token.firstName as string;
+        session.user.lastName = token.lastName as string;
+        session.user.image = token.image as string;
       }
 
       return session;

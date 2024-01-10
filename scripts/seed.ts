@@ -20,6 +20,7 @@ const posts: NewPost[] = [
     title: "The Art of Storytelling",
     description:
       "Discover the secrets behind creating compelling narratives that capture the imagination.",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl aliquet nunc, vitae aliquam nisl"
   },
   {
     id: 2,
@@ -27,6 +28,7 @@ const posts: NewPost[] = [
     title: "Understanding Character Development",
     description:
       "Dive into the complex world of character development and learn how to create memorable characters.",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl aliquet nunc, vitae aliquam nisl"
   },
   {
     id: 4,
@@ -34,13 +36,15 @@ const posts: NewPost[] = [
     title: "The Power of Visual Storytelling",
     description:
       "Explore how visual elements can enhance storytelling and engage audiences in unique ways.",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl aliquet nunc, vitae aliquam nisl"
   },
 ];
 
 const users: NewUser[] = [
   {
     id: 1,
-    name: "John Smith",
+    firstName: "John",
+    lastName: "Smith",
     email: "johnsmith@gmail.com",
     password: "password",
   },

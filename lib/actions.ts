@@ -46,7 +46,7 @@ export async function registerUserAction(newUser: unknown) {
 
   if (!user) {
     return {
-      error: "Unable to register user",
+      error: "Unable to register profile",
     };
   }
 }
