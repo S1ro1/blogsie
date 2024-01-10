@@ -18,7 +18,7 @@ export default async function Page() {
       <Card key={post.title}>
         <CardHeader>
           <CardTitle>{post.title}</CardTitle>
-          <CardDescription>{post.author.name}</CardDescription>
+          <CardDescription>{post.author.firstName || post.author.email.split("@")[0]}</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-sm mt-4">{post.description}</p>
