@@ -11,6 +11,7 @@ import { editUserAction } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -25,6 +26,7 @@ function SubmitButton() {
 export function UserForm() {
   const [img, setImg] = useState<string | null>(null);
   const { data: session, update } = useSession();
+  const router = useRouter();
 
   if (!session || !session.user) {
     return null;
@@ -83,6 +85,7 @@ export function UserForm() {
         });
       }
       showToast("User updated successfully!");
+      router.refresh();
     }
   };
 

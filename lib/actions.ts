@@ -13,6 +13,7 @@ import { users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { del, put } from "@vercel/blob";
+import {revalidatePath} from "next/cache";
 
 const uploadToVercelBlob = async (file: File) => {
   const { url } = await put(file.name, file, {
