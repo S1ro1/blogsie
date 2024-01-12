@@ -8,7 +8,7 @@ export const { handlers, auth } = NextAuth({
       name: "Credentials",
       id: "credentials",
       credentials: {
-        email : { label: "Email", type: "email", placeholder: "jsmith" },
+        email: { label: "Email", type: "email", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
         firstName: { label: "First Name", type: "text" },
         lastName: { label: "Last Name", type: "text" },
@@ -42,7 +42,7 @@ export const { handlers, auth } = NextAuth({
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       return baseUrl;
     },
-    async jwt({ token, user , trigger, session}) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.firstName = user.firstName;
@@ -51,9 +51,8 @@ export const { handlers, auth } = NextAuth({
       }
 
       if (trigger === "update") {
-        token = { ...user, ...session }
+        token = { ...user, ...session };
       }
-
 
       return token;
     },

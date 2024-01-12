@@ -1,5 +1,5 @@
-import create from 'zustand';
-import {UserType} from "@/lib/types";
+import create from "zustand";
+import { UserType } from "@/lib/types";
 // Define the store's state and actions
 interface UserStore {
   user: UserType | null;

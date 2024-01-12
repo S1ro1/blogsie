@@ -1,23 +1,29 @@
 "use server";
 
-import {editUserSchema, NewPost, newPostSchema, newUserSchema, UserType} from "@/lib/types";
-import {db, insertPost, insertUser} from "@/lib/db";
-import {compare, hash} from "bcrypt";
-import {users} from "@/lib/schema";
-import {eq} from "drizzle-orm";
-import {auth} from "@/auth";
-import {del, put} from "@vercel/blob";
+import {
+  editUserSchema,
+  NewPost,
+  newPostSchema,
+  newUserSchema,
+  UserType,
+} from "@/lib/types";
+import { db, insertPost, insertUser } from "@/lib/db";
+import { compare, hash } from "bcrypt";
+import { users } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+import { auth } from "@/auth";
+import { del, put } from "@vercel/blob";
 
-const uploadToVercelBlob = async(file: File) => {
-  const {url} = await put(file.name, file, {
-    access: 'public'
+const uploadToVercelBlob = async (file: File) => {
+  const { url } = await put(file.name, file, {
+    access: "public",
   });
   return url;
-}
+};
 
-const deleteFromVercelBlob = async(url: string) => {
+const deleteFromVercelBlob = async (url: string) => {
   await del(url);
-}
+};
 
 export const login = async (email: string, password: string) => {
   const user = await db
@@ -145,10 +151,10 @@ export async function editUserAction(newUserData: FormData) {
 
     const oldUrl = await db.query.users.findFirst({
       columns: {
-        image: true
+        image: true,
       },
-      where: eq(users.id, parseInt(session.user.id))
-    })
+      where: eq(users.id, parseInt(session.user.id)),
+    });
 
     if (oldUrl?.image) {
       await deleteFromVercelBlob(oldUrl.image);
@@ -164,7 +170,8 @@ export async function editUserAction(newUserData: FormData) {
         lastName: validatedUserData.data.lastName,
         image: link ? link : undefined,
       })
-      .where(eq(users.id, parseInt(session.user.id))).returning();
+      .where(eq(users.id, parseInt(session.user.id)))
+      .returning();
     return user[0] as UserType;
   } catch (e) {
     return {

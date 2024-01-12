@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,14 +12,14 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 
 interface AvatarMenuProps {
-    imageLink: string;
-    initials: string | null;
-    email: string;
+  imageLink: string;
+  initials: string | null;
+  email: string;
 }
 
 interface MenuItems {
@@ -48,24 +48,22 @@ const menuItems: MenuItems[] = [
     name: "Sign Out",
     href: "/api/auth/signout?callbackUrl=/",
     shortcut: "⌘L",
-  }
-]
+  },
+];
 
 export function AvatarMenu({ imageLink, email, initials }: AvatarMenuProps) {
-  const shownInitials = initials || email.substring(0, 2).toUpperCase()
+  const shownInitials = initials || email.substring(0, 2).toUpperCase();
 
   const menuItemsList = menuItems.map(({ name, href, shortcut }) => {
     return (
       <Link key={name} href={href}>
-      <DropdownMenuItem>
-        {name}
-        <DropdownMenuShortcut>
-          {shortcut}
-        </DropdownMenuShortcut>
-      </DropdownMenuItem>
+        <DropdownMenuItem>
+          {name}
+          <DropdownMenuShortcut>{shortcut}</DropdownMenuShortcut>
+        </DropdownMenuItem>
       </Link>
-    )
-  })
+    );
+  });
 
   return (
     <Button variant="ghost">
@@ -78,12 +76,10 @@ export function AvatarMenu({ imageLink, email, initials }: AvatarMenuProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            {menuItemsList}
-          </DropdownMenuGroup>
+          <DropdownMenuGroup>{menuItemsList}</DropdownMenuGroup>
           <DropdownMenuSeparator />
         </DropdownMenuContent>
       </DropdownMenu>
     </Button>
-  )
+  );
 }
