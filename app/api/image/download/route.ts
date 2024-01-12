@@ -6,8 +6,6 @@ export async function GET(request: NextRequest) {
   if (!url) {
     return new NextResponse("No URL provided", { status: 400 });
   }
-  url = "https://8qkmesip3yauldyl.public.blob.vercel-storage.com/" + url;
-
   const res = await fetch(new URL(url).href);
   const blob = await res.blob();
   const headers = new Headers();

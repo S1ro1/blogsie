@@ -25,6 +25,13 @@ const deleteFromVercelBlob = async (url: string) => {
   await del(url);
 };
 
+export const getVercelBlob = async(url: string) => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  console.log(blob);
+  return blob;
+}
+
 export const login = async (email: string, password: string) => {
   const user = await db
     .select()

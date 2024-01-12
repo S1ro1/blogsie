@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import React from "react";
 
 export const LinkButton = ({
   href,
@@ -11,7 +12,7 @@ export const LinkButton = ({
   className?: string;
 }) => {
   return (
-    <Button variant={"link"} className={className}>
+    <Button variant={"link"} className={className} type={"button"} asChild>
       <Link href={href}>{text}</Link>
     </Button>
   );
