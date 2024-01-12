@@ -6,7 +6,7 @@ import {
   users,
   usersToLikedPosts,
 } from "@/lib/schema";
-import { fetchPosts } from "@/lib/db";
+import {fetchPosts} from "@/lib/db";
 
 export const newUserSchema = z
   .object({
@@ -21,6 +21,18 @@ export const newUserSchema = z
       };
     }
   });
+
+export const editUserSchema = z.object({
+  email: z.string().email("Invalid email address").optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  imageLink: z.instanceof(File).optional().refine((file) => {
+    if (!file) return true;
+    return file.size < 5 * 1024 * 1024;
+  }, {
+    message: "File size must be less than 5MB",
+  }),
+})
 
 export const newPostSchema = z.object({
   title: z.string().min(1, "Title must be at least 1 character long"),

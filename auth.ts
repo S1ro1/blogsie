@@ -42,13 +42,18 @@ export const { handlers, auth } = NextAuth({
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       return baseUrl;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user , trigger, session}) {
       if (user) {
         token.id = user.id;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
         token.image = user.image;
       }
+
+      if (trigger === "update") {
+        token = { ...user, ...session }
+      }
+
 
       return token;
     },

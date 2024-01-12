@@ -1,12 +1,23 @@
 "use server";
 
-import { NewPost, newPostSchema, newUserSchema } from "@/lib/types";
-import { db, insertPost, insertUser } from "@/lib/db";
-import { compare, hash } from "bcrypt";
-import { users } from "@/lib/schema";
-import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
-import { PutBlobResult } from "@vercel/blob";
+import {editUserSchema, NewPost, newPostSchema, newUserSchema, UserType} from "@/lib/types";
+import {db, insertPost, insertUser} from "@/lib/db";
+import {compare, hash} from "bcrypt";
+import {users} from "@/lib/schema";
+import {eq} from "drizzle-orm";
+import {auth} from "@/auth";
+import {del, put} from "@vercel/blob";
+
+const uploadToVercelBlob = async(file: File) => {
+  const {url} = await put(file.name, file, {
+    access: 'public'
+  });
+  return url;
+}
+
+const deleteFromVercelBlob = async(url: string) => {
+  await del(url);
+}
 
 export const login = async (email: string, password: string) => {
   const user = await db
@@ -98,17 +109,66 @@ export const addBlogPostAction = async (newBlogPost: unknown) => {
   }
 };
 
-export async function uploadFileAction(formData: FormData) {
-  const file = formData.get("picture") as File;
-
-  if (!file) {
-    return null;
-  }
-
-  const response = await fetch(`http://localhost:3000/api/image/upload?filename=${file.name}`, {
-    method: "POST",
-    body: file,
+export async function editUserAction(newUserData: FormData) {
+  const validatedUserData = editUserSchema.safeParse({
+    email: newUserData.get("email"),
+    firstName: newUserData.get("firstName"),
+    lastName: newUserData.get("lastName"),
+    imageLink: newUserData.get("imageLink"),
   });
 
-  return (await response.json()) as PutBlobResult;
+  if (!validatedUserData.success) {
+    let error_message = "";
+    validatedUserData.error.issues.forEach((issue) => {
+      error_message += issue.message + ". ";
+    });
+    return {
+      error: error_message,
+    };
+  }
+
+  const session = await auth();
+  if (!session) {
+    return {
+      error: "You must be logged in to edit your profile",
+    };
+  }
+  if (!session.user) {
+    return {
+      error: "You must be logged in to edit your profile",
+    };
+  }
+
+  let link = "";
+  if (validatedUserData.data.imageLink?.type.startsWith("image")) {
+    link = await uploadToVercelBlob(validatedUserData.data.imageLink as File);
+
+    const oldUrl = await db.query.users.findFirst({
+      columns: {
+        image: true
+      },
+      where: eq(users.id, parseInt(session.user.id))
+    })
+
+    if (oldUrl?.image) {
+      await deleteFromVercelBlob(oldUrl.image);
+    }
+  }
+
+  try {
+    const user = await db
+      .update(users)
+      .set({
+        email: validatedUserData.data.email,
+        firstName: validatedUserData.data.firstName,
+        lastName: validatedUserData.data.lastName,
+        image: link ? link : undefined,
+      })
+      .where(eq(users.id, parseInt(session.user.id))).returning();
+    return user[0] as UserType;
+  } catch (e) {
+    return {
+      error: "Unable to edit profile",
+    };
+  }
 }

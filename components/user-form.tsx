@@ -4,49 +4,41 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
-import {User} from "next-auth";
 import React, {useState} from "react";
+import {editUserSchema} from "@/lib/types";
+import {showToast} from "@/lib/utils";
+import {editUserAction} from "@/lib/actions";
+import {useSession} from "next-auth/react";
+import {ReloadIcon} from "@radix-ui/react-icons";
+import { useFormStatus } from "react-dom";
 
-interface UserFormProps {
-  user: User;
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (<Button className={"w-full mt-6"} type={"submit"} disabled={pending}>
+    {pending ? (
+      <ReloadIcon className={"animate-spin mr-2"}/>
+    ) : null}
+    { pending ? "Saving..." : "Save"}
+  </Button>)
 }
 
-export function UserForm({user}: UserFormProps) {
+export function UserForm() {
   const [img, setImg] = useState<string | null>(null);
+  const { data: session, update } = useSession();
 
-  const {image, email, firstName, lastName} = user;
-  if (!email) {
-    // TODO: Handle this case, but shouldn't ever happen
+  if (!session || !session.user) {
     return null;
   }
+  const user = session.user;
 
+  if (!user.email) {
+    return null; // should never happen
+  }
+  const {image, email, firstName, lastName} = user;
   const imageLink = image || "";
   let initials = email.substring(0, 2).toUpperCase();
   if (firstName && lastName) {
     initials = `${firstName[0]}${lastName[0]}`.toUpperCase();
-  }
-
-  const icon = () => {
-    if (img) {
-      return (
-        <>
-          <AvatarImage src={img}/>
-          <AvatarFallback>{initials}</AvatarFallback>
-        </>
-      )
-    }
-    if (imageLink) {
-      return (
-        <>
-          <AvatarImage src={`/api/image/download?url=${imageLink}`} />
-          <AvatarFallback>{initials}</AvatarFallback>
-        </>
-      )
-    }
-
-    return (
-      <AvatarFallback>{initials}</AvatarFallback>
-    )
   }
 
   const changeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,12 +57,41 @@ export function UserForm({user}: UserFormProps) {
     }
   }
 
+  const editUser = async (formData: FormData) => {
+    const newUserData = editUserSchema.safeParse({
+      email: formData.get("email") as string,
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
+      imageLink: formData.get("imageLink") as string,
+    });
+
+    if (!newUserData.success) {
+      newUserData.error.issues.forEach((issue) => {
+        showToast(issue.message);
+      });
+      return;
+    }
+
+    const response = await editUserAction(formData);
+    if ("error" in response) {
+      showToast(response.error);
+    } else {
+      if (session) {
+        const newSession = await update({
+          ...user,
+          ...response,
+        })
+      }
+      showToast("User updated successfully!");
+    }
+  }
+
   return (
-    <form>
+    <form action={editUser}>
       <div className={"relative overflow-hidden rounded-b-full w-24 mx-auto"}>
         <Label
           className={"absolute bottom-0 left-1/2 translate-x-[-50%] w-24 h-8 bg-slate-300 opacity-60 rounded-b-full z-50 hover:opacity-80 cursor-pointer transition-opacity"}>
-          <Input className={"hidden"} type={"file"} name={"image"} onChange={changeAvatar}/>
+          <Input className={"hidden"} type={"file"} name={"imageLink"} onChange={changeAvatar}/>
           <svg xmlns={"http://www.w3.org/2000/svg"} width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="#000000" strokeWidth="2.657142857142857" strokeLinejoin="round"
                className={"lucide lucide-pencil-line mx-auto my-2"}>
@@ -80,30 +101,29 @@ export function UserForm({user}: UserFormProps) {
           </svg>
         </Label>
         <Avatar className={"w-24 h-24 mx-auto"}>
-          {icon()}
+          {img ? <AvatarImage src={img}/> : imageLink ? <AvatarImage src={`/api/image/download?url=${imageLink}`} /> : <></>}
+          <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
       </div>
       <div className={"space-y-4 pt-4"}>
         <div className={"space-y-2"}>
           <Label>Email</Label>
-          <Input id="email" placeholder={"Enter your email"} value={email} name={"email"}/>
+          <Input id="email" placeholder={"Enter your email"} defaultValue={email} name={"email"}/>
         </div>
       </div>
       <div className={"space-y-4 pt-4"}>
         <div className={"space-y-2"}>
           <Label htmlFor={"first-name"}>First Name</Label>
-          <Input id={"first-name"} name={"first-name"} placeholder={"Enter your first name"} value={firstName}/>
+          <Input id={"first-name"} name={"firstName"} placeholder={"Enter your first name"} defaultValue={firstName}/>
         </div>
       </div>
       <div className={"space-y-4 pt-4"}>
         <div className={"space-y-2"}>
           <Label htmlFor={"last-name"}>Last Name</Label>
-          <Input id={"last-name"} name={"last-name"} placeholder={"Enter your last name"} value={lastName}/>
+          <Input id={"last-name"} name={"lastName"} placeholder={"Enter your last name"} defaultValue={lastName}/>
         </div>
       </div>
-      <Button className={"w-full mt-6"} type={"submit"}>
-        Save changes
-      </Button>
+      <SubmitButton/>
     </form>
   )
 }
