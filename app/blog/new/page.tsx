@@ -13,6 +13,7 @@ import { showToast } from "@/lib/utils";
 import { BlogTitle } from "@/components/blog-title";
 import { MarkdownInput } from "@/components/markdown-input";
 import { MarkdownPreview } from "@/components/markdown-preview";
+import {ChevronRightIcon} from "@radix-ui/react-icons";
 
 export default function Page() {
   const [rawMarkdown, setRawMarkdown] = useState<string>("");
@@ -30,7 +31,7 @@ export default function Page() {
       });
       return;
     }
-    // TODO: Maybe do a server validation before returning and show all the errors
+
     const response = await addBlogPostAction(newPost.data);
     if (response?.error) {
       showToast(response.error);
@@ -40,21 +41,24 @@ export default function Page() {
   };
 
   return (
-    <div className={"flex justify-center h-[90vh]"}>
-      <form
-        className={"flex flex-col w-[80%] items-start gap-y-4 h-[90%]"}
-        action={createPost}
-      >
-        <BlogTitle />
-        <ResizablePanelGroup direction="horizontal" className={"relative"}>
-          <MarkdownInput text={rawMarkdown} setText={setRawMarkdown} />
-          <ResizableHandle withHandle />
-          <MarkdownPreview text={rawMarkdown} />
-          <Button className={"absolute bottom-0 right-0 m-5"} type={"submit"}>
-            Post
-          </Button>
-        </ResizablePanelGroup>
-      </form>
-    </div>
+    <>
+      <h1 className={"text-4xl font-bold mx-[10%] py-8"}>Share your thoughts...</h1>
+      <div className={"flex justify-center h-[90vh]"}>
+        <form
+          className={"flex flex-col w-[80%] items-start gap-y-4 h-[80%]"}
+          action={createPost}
+        >
+          <ResizablePanelGroup direction="horizontal" className={"relative"}>
+            <MarkdownInput text={rawMarkdown} setText={setRawMarkdown} />
+            <ResizableHandle withHandle />
+            <MarkdownPreview text={rawMarkdown} />
+            <Button className={"absolute bottom-0 right-0 m-5"} type={"submit"}>
+              Finish
+              <ChevronRightIcon className="h-4 w-4" />
+            </Button>
+          </ResizablePanelGroup>
+        </form>
+      </div>
+    </>
   );
 }

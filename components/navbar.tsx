@@ -18,16 +18,21 @@ export const NavBar = async () => {
 
   const navigationItems = (
     <>
-      <Button variant={"ghost"}>
+      <Button variant={"ghost"} asChild>
         <Link href={"/"}>Home</Link>
       </Button>
-      <Button variant={"ghost"}>
+      <Button variant={"ghost"} asChild>
         <Link href={"/blog"}>Feed</Link>
       </Button>
       {session && (
-        <Button variant={"ghost"}>
-          <Link href={"/blog/me"}>My Blogs</Link>
-        </Button>
+        <>
+          <Button variant={"ghost"} asChild>
+            <Link href={"/blog/me"}>My Blogs</Link>
+          </Button>
+          <Button variant={"ghost"} asChild>
+            <Link href={"/blog/new"}>New Blog</Link>
+          </Button>
+        </>
       )}
     </>
   );
