@@ -1,4 +1,3 @@
-"use client";
 import { FinishPostForm } from "@/components/forms/finish-post-form";
 
 export default function Page() {
