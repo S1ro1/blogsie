@@ -9,7 +9,11 @@ interface MarkdownInputProps {
   setText: (text: string) => void;
 }
 
-export const MarkdownInput = ({ text, name, setText }: MarkdownInputProps) => {
+export const MarkdownInputForm = ({
+  text,
+  name,
+  setText,
+}: MarkdownInputProps) => {
   return (
     <ResizablePanel defaultSize={50}>
       <Textarea

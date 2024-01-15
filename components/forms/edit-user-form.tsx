@@ -23,7 +23,7 @@ function SubmitButton() {
   );
 }
 
-export function UserForm() {
+export function EditUserForm() {
   const [img, setImg] = useState<string | null>(null);
   const { data: session, update } = useSession();
   const router = useRouter();

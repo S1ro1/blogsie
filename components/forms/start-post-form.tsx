@@ -9,7 +9,7 @@ import {
   ResizableHandle,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { MarkdownInput } from "@/components/markdown-input";
+import { MarkdownInputForm } from "@/components/forms/markdown-input-form";
 import { MarkdownPreview } from "@/components/markdown-preview";
 import { Button } from "@/components/ui/button";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
@@ -47,7 +47,7 @@ export const StartPostForm = ({ authorId }: StartPostFormProps) => {
         action={createPost}
       >
         <ResizablePanelGroup direction="horizontal" className={"relative"}>
-          <MarkdownInput
+          <MarkdownInputForm
             text={rawMarkdown}
             setText={setRawMarkdown}
             name={"blogContent"}

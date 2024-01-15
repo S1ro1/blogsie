@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { fetchPosts } from "@/lib/db";
-import { TagDisplay } from "@/components/tag-display";
+import { TagDisplay } from "@/components/popular-tag-list";
 
 export default async function Page() {
   const blogPosts = await fetchPosts();

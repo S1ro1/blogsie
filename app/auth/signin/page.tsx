@@ -9,12 +9,12 @@ import { showToast } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { LinkButton } from "@/components/link-button";
 
-export default function Page() {
+const useSearchParamsToast = () => {
   const params = useSearchParams();
+  const shownToast = useRef(false);
+
   const showErrorToast = params.get("error");
   const showSucessRegistrationToast = params.get("success");
-
-  const shownToast = useRef(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -32,6 +32,12 @@ export default function Page() {
       shownToast.current = false;
     };
   }, [showErrorToast, showSucessRegistrationToast]);
+
+  return null;
+}
+
+export default function Page() {
+  useSearchParamsToast();
 
   const login = (formData: FormData) => {
     signIn("credentials", {

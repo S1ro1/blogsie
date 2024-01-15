@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { UserForm } from "@/components/user-form";
+import { EditUserForm } from "@/components/forms/edit-user-form";
 import { redirect } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 
@@ -23,7 +23,7 @@ export default async function Component() {
         </p>
       </div>
       <SessionProvider session={session}>
-        <UserForm />
+        <EditUserForm />
       </SessionProvider>
     </div>
   );

@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { StartPostForm } from "@/components/start-post-form";
+import { StartPostForm } from "@/components/forms/start-post-form";
 
 export default async function Page() {
   const session = await auth();
