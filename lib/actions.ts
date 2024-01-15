@@ -4,16 +4,17 @@ import {
   editUserSchema,
   NewPost,
   newPostSchema,
+  NewPostToTag,
   newUserSchema,
   UserType,
 } from "@/lib/types";
 import { db, insertPost, insertUser } from "@/lib/db";
 import { compare, hash } from "bcrypt";
-import { users } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import { postsToTags, tags, users } from "@/lib/schema";
+import { eq, inArray } from "drizzle-orm";
 import { auth } from "@/auth";
 import { del, put } from "@vercel/blob";
-import {revalidatePath} from "next/cache";
+import { revalidatePath } from "next/cache";
 
 const uploadToVercelBlob = async (file: File) => {
   const { url } = await put(file.name, file, {
@@ -26,12 +27,11 @@ const deleteFromVercelBlob = async (url: string) => {
   await del(url);
 };
 
-export const getVercelBlob = async(url: string) => {
+export const getVercelBlob = async (url: string) => {
   const response = await fetch(url);
   const blob = await response.blob();
-  console.log(blob);
   return blob;
-}
+};
 
 export const login = async (email: string, password: string) => {
   const user = await db
@@ -76,51 +76,38 @@ export async function registerUserAction(newUser: unknown) {
   }
 }
 
-export const addBlogPostAction = async (newBlogPost: unknown) => {
-  const validatedBlogPost = newPostSchema.safeParse(newBlogPost);
+export const newPostAction = async (newPost: NewPost) => {
+  return await insertPost(newPost);
+};
 
-  if (!validatedBlogPost.success) {
-    let error_message = "";
-    validatedBlogPost.error.issues.forEach((issue) => {
-      error_message += issue.message + ". ";
+export const newTagsAction = async (postId: number, newTags: string[]) => {
+  const insertPromise = db
+    .insert(tags)
+    .values(
+      newTags.map((tag) => {
+        return {
+          name: tag,
+        };
+      }),
+    )
+    .onConflictDoNothing({
+      target: tags.name,
     });
-    return {
-      error: error_message,
-    };
-  }
 
-  const session = await auth();
-  if (!session) {
-    return {
-      error: "You must be logged in to add a blog post",
-    };
-  }
-  if (!session.user) {
-    return {
-      error: "You must be logged in to add a blog post",
-    };
-  }
+  const queryPromise = db.query.tags.findMany({
+    where: inArray(tags.name, newTags),
+  });
 
-  let blogPost: NewPost;
-  try {
-    blogPost = {
-      authorId: parseInt(session.user.id),
-      title: validatedBlogPost.data.title,
-      text: validatedBlogPost.data.content, //TODO
-      description: validatedBlogPost.data.content,
-    };
-  } catch (e) {
-    return {
-      error: "Unable to add blog post",
-    };
-  }
+  const [_, insertedTags] = await Promise.all([insertPromise, queryPromise]);
 
-  const newPost = await insertPost(blogPost);
-  if (!newPost) {
-    return {
-      error: "Unable to add blog post",
-    };
-  }
+  await db.insert(postsToTags).values(
+    insertedTags.map((tag) => {
+      return {
+        postId: postId,
+        tagId: tag.id,
+      };
+    }),
+  );
 };
 
 export async function editUserAction(newUserData: FormData) {

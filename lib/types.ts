@@ -41,7 +41,6 @@ export const editUserSchema = z.object({
 });
 
 export const newPostSchema = z.object({
-  title: z.string().min(1, "Title must be at least 1 character long"),
   content: z.string().min(1, "Content must be at least 1 character long"),
 });
 

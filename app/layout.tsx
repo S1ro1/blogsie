@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { NavBar } from "@/components/navbar";
 import { SessionProvider } from "next-auth/react";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 

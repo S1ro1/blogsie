@@ -30,7 +30,7 @@ export const NavBar = async () => {
             <Link href={"/blog/me"}>My Blogs</Link>
           </Button>
           <Button variant={"ghost"} asChild>
-            <Link href={"/blog/new"}>New Blog</Link>
+            <Link href={"/blog/new/start"}>New Blog</Link>
           </Button>
         </>
       )}
