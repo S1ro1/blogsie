@@ -1,3 +1,4 @@
+import { TagList } from "./tag-list";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -15,6 +16,7 @@ interface PostCardProps {
   firstName: string;
   lastName: string;
   email: string;
+  tags: string[];
 }
 
 export function PostCard({
@@ -23,13 +25,18 @@ export function PostCard({
   firstName,
   lastName,
   email,
+  tags,
 }: PostCardProps) {
+  const tagsToShow = tags.length > 3 ? tags.slice(0, 3) : tags;
   return (
     <Card key={title}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>
-          {firstName + " " + lastName || email.split("@")[0]}
+          <div className="flex justify-between">
+            <p>{firstName ? firstName + " " + lastName : email}</p>
+            <TagList tags={tagsToShow} />
+          </div>
         </CardDescription>
       </CardHeader>
       <CardContent>

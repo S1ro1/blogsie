@@ -3,6 +3,7 @@ import { fetchPosts } from "@/lib/db";
 
 export async function PostCardList() {
   const posts = await fetchPosts();
+
   return (
     <>
       {posts.map((post) => {
@@ -14,6 +15,7 @@ export async function PostCardList() {
             firstName={post.author.firstName || ""}
             lastName={post.author.lastName || ""}
             description={post.description || ""}
+            tags={post.postToTags.map((postToTag) => postToTag.tag.name)}
           />
         );
       })}
