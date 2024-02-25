@@ -1,5 +1,6 @@
 "use server";
 
+import { postsPerPage } from "@/lib/consts";
 import { PostCard } from "./post-card";
 import { fetchPosts } from "@/lib/db";
 
@@ -8,11 +9,13 @@ type PostCardListProps = {
 };
 
 export async function PostCardList({ currentPage }: PostCardListProps) {
-  const posts = await fetchPosts();
+  const posts = await fetchPosts(
+    (currentPage - 1) * postsPerPage,
+    postsPerPage,
+  );
 
   return (
     <div className="flex flex-col space-y-5">
-      {currentPage}
       {posts.map((post) => {
         return (
           <PostCard

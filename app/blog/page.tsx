@@ -1,6 +1,7 @@
 import { PostCardList } from "@/components/post-card-list";
 import { PostPagination } from "@/components/post-pagination";
 import { getPostCount } from "@/lib/db";
+import { postsPerPage } from "@/lib/consts";
 
 export type Props = {
   searchParams: {
@@ -8,10 +9,8 @@ export type Props = {
   };
 };
 
-const PAGE_SIZE = 4;
-
 export default async function Page({ searchParams }: Props) {
-  const totalPages = Math.ceil((await getPostCount()) / PAGE_SIZE);
+  const totalPages = Math.ceil((await getPostCount()) / postsPerPage);
   const currentPage = searchParams.currentPage
     ? parseInt(searchParams.currentPage)
     : 1;

@@ -42,8 +42,13 @@ export const insertPostToTag = async (newPostToTag: NewPostToTag) => {
 // Fetching data
 // -------------------------------------------------
 
-export const fetchPosts = async () => {
+export const fetchPosts = async (
+  offset: number = 0,
+  limit: number | undefined = undefined,
+) => {
   return db.query.posts.findMany({
+    offset: offset,
+    ...(limit !== undefined ? { limit: limit } : {}),
     with: {
       author: true,
       userToLikedPosts: true,
