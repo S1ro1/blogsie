@@ -1,11 +1,18 @@
+"use server";
+
 import { PostCard } from "./post-card";
 import { fetchPosts } from "@/lib/db";
 
-export async function PostCardList() {
+type PostCardListProps = {
+  currentPage: number;
+};
+
+export async function PostCardList({ currentPage }: PostCardListProps) {
   const posts = await fetchPosts();
 
   return (
-    <>
+    <div className="flex flex-col space-y-5">
+      {currentPage}
       {posts.map((post) => {
         return (
           <PostCard
@@ -19,6 +26,6 @@ export async function PostCardList() {
           />
         );
       })}
-    </>
+    </div>
   );
 }

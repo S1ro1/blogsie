@@ -33,20 +33,20 @@ export function PostCard({
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>
-          <div className="flex justify-between">
-            <p>{firstName ? firstName + " " + lastName : email}</p>
-            <TagList tags={tagsToShow} />
-          </div>
+          {firstName ? firstName + " " + lastName : email}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm mt-4">
-          {description
-            ? description.length > 200
-              ? description.slice(0, 200) + "..."
-              : description
-            : ""}
-        </p>
+        <div className="flex justify-between">
+          <div className="text-sm mt-4">
+            {description
+              ? description.length > 200
+                ? description.slice(0, 200) + "..."
+                : description
+              : ""}
+          </div>
+          <TagList tags={tagsToShow} />
+        </div>
       </CardContent>
       <CardFooter>
         <Button variant="outline">Read More</Button>

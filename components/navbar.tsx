@@ -1,9 +1,9 @@
-import { Blogsie } from "@/components/blogsie";
-import { ThemeToggle } from "@/components/theme-toggle";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 import { AvatarMenu } from "@/components/avatar-menu";
+import { Blogsie } from "@/components/blogsie";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const NavBar = async () => {
   const session = await auth();

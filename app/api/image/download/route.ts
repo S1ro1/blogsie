@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   if (!url) {
     return new NextResponse("No URL provided", { status: 400 });
   }
+
   const res = await fetch(new URL(url).href);
   const blob = await res.blob();
   const headers = new Headers();

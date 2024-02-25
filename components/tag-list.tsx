@@ -6,10 +6,10 @@ interface TagListProps {
 
 export function TagList({ tags }: TagListProps) {
   return (
-    <div className="flex flex-wrap gap-x-2 gap-y-2">
-      {tags.map((tag) => (
-        <Badge key={tag}>{`#${tag}`}</Badge>
-      ))}
-    </div>
+    <span className="flex gap-x-2 gap-y-2">
+      {tags.map((tag) => {
+        return <Badge key={tag} className="h-2/3 text-xs">{`#${tag}`}</Badge>;
+      })}
+    </span>
   );
 }

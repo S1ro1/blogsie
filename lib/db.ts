@@ -11,6 +11,7 @@ import {
   NewUser,
   NewUserToLikedPost,
 } from "@/lib/types";
+import { count } from "drizzle-orm";
 
 export const db = drizzle(psql, { schema });
 
@@ -53,4 +54,9 @@ export const fetchPosts = async () => {
       },
     },
   });
+};
+
+export const getPostCount = async () => {
+  const postCount = await db.select({ value: count(posts.id) }).from(posts);
+  return postCount[0]["value"];
 };
