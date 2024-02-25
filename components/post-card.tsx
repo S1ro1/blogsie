@@ -29,7 +29,7 @@ export function PostCard({
 }: PostCardProps) {
   const tagsToShow = tags.length > 3 ? tags.slice(0, 3) : tags;
   return (
-    <Card key={title}>
+    <Card key={title} className="h-[20vh]">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>

@@ -16,9 +16,9 @@ export default async function Page({ searchParams }: Props) {
     : 1;
 
   return (
-    <>
+    <div className="flex flex-col space-y-5">
       <PostCardList currentPage={currentPage} />
       <PostPagination currentPage={currentPage} totalPages={totalPages} />
-    </>
+    </div>
   );
 }
