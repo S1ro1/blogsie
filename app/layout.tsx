@@ -27,8 +27,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NavBar />
-          <div className={"mt-16"}>{children}</div>
+          <main className="space-y-4">
+            <NavBar />
+            {children}
+          </main>
         </ThemeProvider>
         <Toaster />
       </body>

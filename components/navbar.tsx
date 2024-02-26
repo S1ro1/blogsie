@@ -4,6 +4,7 @@ import { Blogsie } from "@/components/blogsie";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Separator } from "./ui/separator";
 
 export const NavBar = async () => {
   const session = await auth();
@@ -38,29 +39,32 @@ export const NavBar = async () => {
   );
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 flex justify-between">
-      <div className="m-4">
-        <Link href="/">
-          <Blogsie className="w-8 h-8" />
-        </Link>
+    <div>
+      <div className="flex justify-between w-full">
+        <div className="m-4">
+          <Link href="/">
+            <Blogsie className="w-8 h-8" />
+          </Link>
+        </div>
+        <div className="flex flex-row items-center gap-5 m-4">
+          {navigationItems}
+        </div>
+        <div className="flex flex-row items-center gap-5 m-4">
+          <ThemeToggle />
+          {session ? (
+            <AvatarMenu
+              imageLink={imageLink}
+              email={email as string}
+              initials={initials}
+            />
+          ) : (
+            <Button variant={"ghost"}>
+              <Link href={"/auth/signup"}>Sign Up</Link>
+            </Button>
+          )}
+        </div>
       </div>
-      <div className="flex flex-row items-center gap-5 m-4">
-        {navigationItems}
-      </div>
-      <div className="flex flex-row items-center gap-5 m-4">
-        <ThemeToggle />
-        {session ? (
-          <AvatarMenu
-            imageLink={imageLink}
-            email={email as string}
-            initials={initials}
-          />
-        ) : (
-          <Button variant={"ghost"}>
-            <Link href={"/auth/signup"}>Sign Up</Link>
-          </Button>
-        )}
-      </div>
+      <Separator />
     </div>
   );
 };
